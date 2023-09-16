@@ -131,12 +131,24 @@ class OCRModel:
         try:
             print("Entered extract_text_from_regions...")
             for region in regions:
-                x1, y1, x2, y2 = region
+                x_values = region[:, 0]  # Extract all x coordinates
+                y_values = region[:, 1]  # Extract all y coordinates
+
+                # Calculate x1, y1, x2, y2
+                x1, y1 = int(np.min(x_values)), int(np.min(y_values))
+                x2, y2 = int(np.max(x_values)), int(np.max(y_values))
+                # print(f"region: {region}")
+                # x1, y1, x2, y2 = region
+                print(f"x1: {x1}, y1:{y1}, x2: {x2}, y2:{y2}")
+
                 print("slicing ...")
                 # Ensure that the indices are integers
+                print("getting x1, ....")
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+                print(f"x1: {x1}, y1:{y1}, x2: {x2}, y2:{y2}")
                 image_array = np.array(image)
 
+                print("cropping image ...")
                 cropped_image = image_array[y1:y2, x1:x2]
                 print("Performing ocr...")
                 ocr_results = self.perform_ocr([cropped_image])
