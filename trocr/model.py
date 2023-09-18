@@ -7,6 +7,7 @@ import streamlit as st
 import cv2
 import tempfile
 import numpy as np
+import time
 
 # import craft functions
 from craft_text_detector import (
@@ -174,62 +175,115 @@ class OCRModel:
             logger.error(f"Error during OCR processing: {e}")
             raise
 
+# Define Streamlit app
 def main():
+    st.set_page_config(
+        page_title="OCR App",
+        page_icon=":memo:",  # Add an icon
+        layout="wide"  # Use a wider layout
+    )
     st.title("OCR App")
+    st.markdown("""
+    Optical Character Recognition (OCR) allows you to extract text from images and PDFs. 
+    Upload an image or PDF to get started!
+    """)
 
     ocr_model = OCRModel()
-
-    input_type = st.radio("Select input type:", ("Upload Image/PDF", "Enter File Path"))
+    
+    # Select input type
+    input_type = st.sidebar.radio("Select input type:", ("Upload Image/PDF", "Enter File Path"))
     file_path = None  # Initialize file_path variable
 
+    # Upload an input file
     if input_type == "Upload Image/PDF":
-        uploaded_file = st.file_uploader("Choose an image or PDF...", type=["jpg", "jpeg", "png", "pdf"])
+        st.sidebar.markdown("### Upload Image/PDF")
+
+        uploaded_file = st.sidebar.file_uploader("Choose an image or PDF...", type=["jpg", "jpeg", "png", "pdf"])
         if uploaded_file is not None:
-            # Create a temporary file to store the uploaded image
-            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            # Determine the file extension
+            file_extension = ".jpg" if uploaded_file.type.startswith('image') else ".pdf"
+
+            # Create a temporary file with the determined extension
+            with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as temp_file:
                 temp_file.write(uploaded_file.read())
                 file_path = temp_file.name
+                print("file_path:", file_path)
+
+            # Determine the actual file type from the file extension
+            actual_file_extension = file_path.split('.')[-1].lower()
+
     else:
         file_path = st.text_input("Enter the file path:")
 
+    # Process the selected file
     if file_path:
         try:
             images = []
-            if file_path.lower().endswith(('.jpg', '.jpeg', '.png')):
+            if actual_file_extension in ["jpg", "jpeg"]:            # if file_path.lower().endswith(('.jpg', '.jpeg', '.png')):
                 image = ocr_model.process_image(file_path)
                 images.append(image)
-            elif file_path.lower().endswith('.pdf'):
+            elif actual_file_extension == "pdf":
+                # file_path.lower().endswith('.pdf'):
                 pdf_images = ocr_model.process_pdf(file_path)
                 images.extend(pdf_images)
 
             if images:
-                # Perform text detection using CRAFT
-                text_regions = ocr_model.perform_text_detection(np.array(images[0]))
-                print("text_regions:", text_regions.shape)
 
+                # Create text extraction progress bar
+                extraction_progress_bar = st.empty()
+                extraction_progress_text = st.empty()
+
+                # Check if text detection is completed
+                if detection_progress_bar.progress(100):
+                    # Update extraction progress text
+                    extraction_progress_text.text("Extracting text...")
+
+                # Simulate text extraction and update extraction progress bar accordingly
+                for percent_complete in range(1, 101):
+                    time.sleep(0.05)  # Simulate some processing time
+                    extraction_progress_bar.progress(percent_complete / 100)  # Update progress bar
                 # Extract text from regions using TROCR
                 extracted_text = ocr_model.extract_text_from_regions(images[0], text_regions)
 
-                st.subheader("Image/Document:")
-
-                # Draw bounding boxes on the image
-                # image_with_boxes = np.array(images[0].copy())
-                # for box in text_regions:
-                #     x1, y1, x2, y2 = box
-                #     cv2.rectangle(image_with_boxes, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Green rectangle
+                st.sidebar.subheader("Uploaded Image/Document:")
 
                 for img in images:
-                    st.image(img, caption="Uploaded Image/PDF", use_column_width=True)
+                    st.sidebar.image(img, caption="Uploaded Image/PDF", use_column_width=True)
 
+                st.sidebar.subheader("Text Regions detected:")
+
+                # Display input image with bounding boxes
+                image_with_boxes = np.array(images[0].copy())
+                for box in text_regions:
+                    x_values = box[:, 0]  # Extract all x coordinates
+                    y_values = box[:, 1]  # Extract all y coordinates
+                    
+                    # Calculate x1, y1, x2, y2
+                    x1, y1 = int(np.min(x_values)), int(np.min(y_values))
+                    x2, y2 = int(np.max(x_values)), int(np.max(y_values))
+
+                    # Ensure that the indices are integers
+                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+                    cv2.rectangle(image_with_boxes, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Green rectangle
+                st.sidebar.image(image_with_boxes, caption="Uploaded Image/PDF", use_column_width=True)
+
+                # st.sidebar.subheader("Extracted Text:")
+
+                # for result in extracted_text:
+                #     st.sidebar.write(result)
+                
+                # Display extracted text in the middle of the page in a box
                 st.subheader("Extracted Text:")
-                for result in extracted_text:
-                    st.write(result)
+                st.info("\n".join(extracted_text))
+                st.success("OCR process completed successfully")
 
                 logger.info("OCR process completed successfully")
             else:
-                st.write("No images found for processing.")
+                st.warning("No images found for processing.")
+        
         except Exception as e:
             logger.error(f"Error during OCR process: {e}")
+            st.error(f"Error during OCR process: {e}")
 
 if __name__ == "__main__":
     main()
