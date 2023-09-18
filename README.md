@@ -20,12 +20,11 @@ Welcome to OCR Wonder, your go-to tool for effortlessly extracting text from ima
 
 ## About OCR Wonder
 
-OCR Wonder is a user-friendly OCR (Optical Character Recognition) application built on the Streamlit platform. It empowers you to effortlessly extract text from a variety of sources, including images and PDF documents. Whether you're a student, researcher, or professional, OCR Wonder streamlines the conversion of printed or handwritten text into digital content.
+OCR Wonder is a user-friendly OCR (Optical Character Recognition) application built on the Streamlit platform. It empowers you to effortlessly extract text from a variety of sources, including images and PDF documents. 
 
 **Key highlights:**
 
-- **Simplicity**: A clean and intuitive user interface makes OCR conversion accessible to everyone.
-- **Speed**: Get results in seconds, even from complex documents.
+- **Simplicity**: A clean and intuitive user interface makes OCR conversion
 - **Accuracy**: Leverage state-of-the-art OCR models for highly accurate text extraction.
 - **Flexibility**: Extract text from both images and multi-page PDFs.
 - **Customization**: Tailor the OCR model and configurations to suit your specific needs.
@@ -33,6 +32,11 @@ OCR Wonder is a user-friendly OCR (Optical Character Recognition) application bu
 Discover the magic of OCR Wonder and unlock the potential of your documents!
 
 ---
+
+## Demo
+
+![Demo GIF](media/demo.gif)
+
 
 ## Getting Started
 

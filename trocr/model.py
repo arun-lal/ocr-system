@@ -180,7 +180,7 @@ def main():
     st.set_page_config(
         page_title="OCR App",
         page_icon=":memo:",  # Add an icon
-        layout="wide"  # Use a wider layout
+        layout="centered"  # Use a wider layout
     )
     st.title("OCR App")
     st.markdown("""
@@ -229,6 +229,21 @@ def main():
 
             if images:
 
+                 # Create text detection progress bar
+                detection_progress_bar = st.progress(0)
+                detection_progress_text = st.empty()
+
+                # Perform text detection using CRAFT
+                text_regions = ocr_model.perform_text_detection(np.array(images[0]))
+
+                 # Update detection progress text
+                detection_progress_text.text("Detecting text...")
+
+                # Simulate text detection and update detection progress bar accordingly
+                for percent_complete in range(1, 101):
+                    time.sleep(0.05)  # Simulate some processing time
+                    detection_progress_bar.progress(percent_complete)
+
                 # Create text extraction progress bar
                 extraction_progress_bar = st.empty()
                 extraction_progress_text = st.empty()
@@ -241,10 +256,12 @@ def main():
                 # Simulate text extraction and update extraction progress bar accordingly
                 for percent_complete in range(1, 101):
                     time.sleep(0.05)  # Simulate some processing time
-                    extraction_progress_bar.progress(percent_complete / 100)  # Update progress bar
+                    extraction_progress_bar.progress(percent_complete) 
+                
                 # Extract text from regions using TROCR
                 extracted_text = ocr_model.extract_text_from_regions(images[0], text_regions)
 
+                # Display uploaded image and text regions
                 st.sidebar.subheader("Uploaded Image/Document:")
 
                 for img in images:
