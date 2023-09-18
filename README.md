@@ -42,7 +42,7 @@ Discover the magic of OCR Wonder and unlock the potential of your documents!
 
 ### Installation
 
-OCR Wonder is easy to set up. Just follow these steps:
+OCR App is easy to set up. Just follow these steps:
 
 1. **Clone the repository**:
 
