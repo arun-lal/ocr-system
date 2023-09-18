@@ -1,12 +1,12 @@
-# OCR Wonder: Optical Character Recognition Companion
+# OCR App: Optical Character Recognition Tool
 
-Welcome to OCR Wonder, your go-to tool for effortlessly extracting text from images and PDF documents! With OCR Wonder, you can quickly and accurately convert scanned text into editable and shareable content.
+Welcome to OCR App, a tool for effortlessly extracting text from images and PDF documents! With OCR App, you can quickly and accurately convert scanned text into editable and shareable content.
 
 ---
 
 ## Table of Contents
 
-- [About OCR Wonder](#about-ocr-wonder)
+- [About OCR App](#about-ocr-app)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -18,9 +18,9 @@ Welcome to OCR Wonder, your go-to tool for effortlessly extracting text from ima
 
 ---
 
-## About OCR Wonder
+## About OCR App
 
-OCR Wonder is a user-friendly OCR (Optical Character Recognition) application built on the Streamlit platform. It empowers you to effortlessly extract text from a variety of sources, including images and PDF documents. 
+OCR App is a user-friendly OCR (Optical Character Recognition) application built on the Streamlit platform. It empowers you to effortlessly extract text from a variety of sources, including images and PDF documents. 
 
 **Key highlights:**
 
